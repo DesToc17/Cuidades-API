@@ -70,12 +70,12 @@ const leerInput = async (message) => {
   return desc;
 };
 
-const borrar = async (tareas = []) => {
-  const opciones = tareas.map((tarea, i) => {
+const borrar = async (ciudades = []) => {
+  const opciones = ciudades.map((ciudades, i) => {
     let indice = `${i + 1}`.green;
     return {
-      value: tarea.id,
-      name: `${indice}. ${tarea.desc}`,
+      value: ciudades.id,
+      name: `${indice}. ${ciudades.Ubicacion}`,
     };
   });
 
@@ -133,27 +133,26 @@ const actualizarEstado = async (tareas = []) => {
     }
   };
 
-  const listadoActualizar = async (tareas = []) => {
-    const opciones = tareas.map((tarea, i) => {
+  const listadoActualizar = async (ciudad = []) => {
+    const opciones = ciudad.map((ciudad, i) => {
       let indice = `${i + 1}`.green;
       return {
-        value: tarea.id,
-        name: `${indice}. ${tarea.desc}`,
-        checked: false
-      };
+        value: ciudad.Id,
+        name: `${indice}. ${ciudad.Ubicacion}`,
+      }; 
     });
   
     const pregunta = [
       {
-        type: "checkbox",
+        type: "list",
         name: "ids",
-        message: "Seleccione",
+        message: "Seleccione una opción",
         choices: opciones,
       },
     ];
-  
+    
     const { ids } = await inquirer.prompt(pregunta);
-  
+    
     return ids;
   };
 

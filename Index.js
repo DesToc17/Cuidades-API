@@ -1,8 +1,9 @@
 require('dotenv').config() //para confirgurar las variables de entorno
-const { leerInput, inquirerMenu, confirmacion } = require("./Helpers/Inquirer");
+const { leerInput, inquirerMenu, confirmacion, listadoActualizar } = require("./Helpers/Inquirer");
 const Busquedas = require("./Models/Busquedas");
 
-console.log(process.env)
+//console.log(process.env);
+
 const Main = async() => {
 
     let opt;
@@ -15,15 +16,24 @@ const Main = async() => {
             
             case 1: 
                 const lugar = await leerInput('Ingrese la ciudad que desea buscar: ');
-                await busquedas.ciudad(lugar);
+                const resp = await busquedas.ciudad(lugar);
+                //console.log(resp);
 
-                // console.log(`Información de la ciudad ${lugar.green}`);
-                // console.log('Ciudad: '.green);
-                // console.log('lat: '.green);
-                // console.log('Lng: '.green);
-                // console.log('tempreratura actual: '.green);
-                // console.log('Max: '.green);
-                // console.log('Min: '.green);
+                const ciudad = await listadoActualizar(resp);
+                // console.log(ciudad);
+
+                const lugarSeleccionado = resp.find(l => l.Id == ciudad);
+                const temp = await busquedas.temperatura(lugarSeleccionado.Latitud, lugarSeleccionado.Longitud);
+                console.log(temp);
+
+                console.log(`Información de la ciudad ${lugar.green}`);
+                console.log('Ciudad: '.green, lugarSeleccionado.Ubicacion);
+                console.log('lat: '.green, `${lugarSeleccionado.Latitud}`.white);
+                console.log('Lng: '.green, `${lugarSeleccionado.Longitud}`.white);
+                console.log('Pronostico: '.green, temp.desc);
+                console.log('Tempreratura actual: '.green, `${temp.tempActual}`.white);
+                console.log('Max: '.green, `${temp.tempMax}`.white);
+                console.log('Min: '.green, `${temp.tempMin}`.white);
                 await confirmacion();
                 break;
 
@@ -40,4 +50,4 @@ const Main = async() => {
     }while(opt != 3);
 };
 
-//Main();
+Main();
