@@ -1,0 +1,7 @@
+- Con el comando 'npm init -y' creo el package.json
+- En el .json el comando: "start": "node index.js", nos sirve para con el iniciar la app
+- Para comentar varias lineas de codigo es con el comando 'ctr + k + c'
+- Para descomentar ese codigo 'ctr + k + u'
+- para uns nueva linea de de codigo 'ctr + enter'
+- En el archivo .env se configuran 'las variables de entorno'
+- 'git reset' devuelve los cambios del 'git add' 
