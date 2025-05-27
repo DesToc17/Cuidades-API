@@ -1,7 +1,9 @@
+const fs = require('fs');
 const axios = require('axios');
 
 class Busquedas {
     historial = [];
+    local_data = './Data/Historial.json'; 
 
     constructor (){
 
@@ -11,7 +13,8 @@ class Busquedas {
 
         try{
             // const resp = await axios.get('https://reqres.in/api/users?page=2');
-            const ruta = `https://api.mapbox.com/search/geocode/v6/forward?q=${lugar}&access_token=${process.env.MAPBOX_KEY}`
+            console.log('Consultando...')
+            const ruta = `https://api.mapbox.com/search/geocode/v6/forward?q=${lugar}&access_token=${process.env.MAPBOX_KEY}&limit=10`
             const resp = await axios.get(ruta);
             //console.log(resp.data.features);
             //console.log(JSON.stringify(resp.data, null, 2));
@@ -49,6 +52,40 @@ class Busquedas {
             console.log('Error en la API de la temperatura: ',error)
         };
     };
+
+    agregarHistorial(lugar){
+
+        if (!this.historial.includes(lugar.Ubicacion.toString().toLowerCase())){
+            //unshift para agregar al inicio
+            this.historial.unshift(lugar.Ubicacion.toString().toLowerCase());
+        };
+
+        this.guardarDB();
+    };
+
+    guardarDB(){
+        const payload =  {
+            historial: this.historial
+        }
+        fs.writeFileSync(this.local_data ,JSON.stringify(payload));
+    }
+
+    leerDB(){
+        if (!fs.existsSync(this.local_data)) {
+            return null;
+          }
+        
+          const info = fs.readFileSync(this.local_data, { encoding: "utf-8" });
+          const data = JSON.parse(info);
+          //console.log(data);
+          return data;
+    };
+
+    CargarTareasFromArray(tareas = []) {
+        tareas.forEach((tarea) => {
+          this.historial[tarea.id] = tarea;
+        });
+      }
 };
 
 module.exports = Busquedas;
